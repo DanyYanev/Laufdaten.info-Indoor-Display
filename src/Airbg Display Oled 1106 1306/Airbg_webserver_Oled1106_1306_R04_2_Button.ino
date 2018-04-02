@@ -37,8 +37,8 @@ const int B2_PIN = D6; // 12 Button on shield, WiFi status of ESP
 
 
  // Initialize the OLED display using Wire library
-SH1106 display(0x3c, D1, D2);
-//SSD1306  display(0x3c, D1, D2);
+//SH1106 display(0x3c, D1, D2);
+SSD1306  display(0x3c, D1, D2);
 
 
 void setup(void){
@@ -137,13 +137,22 @@ void handleRoot() {
     // Fetch values from Json file.
     id = atoi(root["esp8266id"]); // ESP8266 ID number
     JsonArray& sensordatavalues = root["sensordatavalues"];
-    p10 = atof(sensordatavalues[0]["value"]); // SDS011 PM 10 data
-    p25 = atof(sensordatavalues[1]["value"]); // SDS011 PM 2.5 data
-    t = atof(sensordatavalues[2]["value"]); // BME280 temperature data
-    h = atof(sensordatavalues[3]["value"]); // BME280 humidity data
-    p = atof(sensordatavalues[4]["value"]); // BME280 presure data
-    p = p / 100;
-    s = atoi(sensordatavalues[8]["value"]); // ESP8266 signal level data
+    for(auto sensor : sensordatavalues){
+      if(strcmp("SDS_P1", sensor["value_type"].as<const char*>()) == 0){
+        p10 = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("SDS_P2", sensor["value_type"].as<const char*>()) == 0){
+        p25 = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_temperature", sensor["value_type"].as<const char*>()) == 0){
+        t = atof(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_humidity", sensor["value_type"].as<const char*>()) == 0){
+        h = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_pressure", sensor["value_type"].as<const char*>()) == 0){
+        p = atoi(sensor["value"].as<const char*>()); 
+        p /= 100;
+      } else if(strcmp("signal", sensor["value_type"].as<const char*>()) == 0){
+        s = atoi(sensor["value"].as<const char*>()); 
+      }
+    }
    
     // Turns numbers into text to reduce 1 digit after decimal point.
     dtostrf(t, 5, 1, tString);
@@ -226,8 +235,8 @@ void OledDisplayPrint4() {
 }
 
 void loop(void){
-   // Reset of ESP if wrong IP or no WiFi conection 
-  if(WiFi.status() == WL_CONNECTED && WiFi.localIP() == IPAddress(_STATIC_IP)){
+   // Reset of ESP if wrong IP 
+  if(WiFi.localIP() == IPAddress(_STATIC_IP)){
     server.handleClient();    
   } else {
     Serial.println(".");
