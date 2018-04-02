@@ -161,13 +161,22 @@ void handleRoot() {
     // Fetch values from Json file.
     id = atoi(root["esp8266id"]); // ESP8266 ID number
     JsonArray& sensordatavalues = root["sensordatavalues"];
-    p10 = atof(sensordatavalues[0]["value"]); // SDS011 PM 10 data
-    p25 = atof(sensordatavalues[1]["value"]); // SDS011 PM 2.5 data
-    t = atof(sensordatavalues[2]["value"]); // BME280 temperature data
-    h = atof(sensordatavalues[3]["value"]); // BME280 humidity data
-    p = atof(sensordatavalues[4]["value"]); // BME280 presure data
-    p = p / 100;
-    s = atoi(sensordatavalues[8]["value"]); // ESP8266 signal level data
+    for(auto sensor : sensordatavalues){
+      if(strcmp("SDS_P1", sensor["value_type"].as<const char*>()) == 0){
+        p10 = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("SDS_P2", sensor["value_type"].as<const char*>()) == 0){
+        p25 = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_temperature", sensor["value_type"].as<const char*>()) == 0){
+        t = atof(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_humidity", sensor["value_type"].as<const char*>()) == 0){
+        h = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_pressure", sensor["value_type"].as<const char*>()) == 0){
+        p = atoi(sensor["value"].as<const char*>()); 
+        p /= 100;
+      } else if(strcmp("signal", sensor["value_type"].as<const char*>()) == 0){
+        s = atoi(sensor["value"].as<const char*>()); 
+      }
+    }
 
     // Turns numbers into text to reduce 1 digit after decimal point.
     dtostrf(t, 5, 1, tString);
@@ -248,9 +257,8 @@ void Page1() {
   tft.setTextSize(1);
   tft.setCursor(120, 20); tft.print("O");
   tft.setCursor(120, 85); tft.print("O");
-  tft.setTextFont(6);
-  tft.setCursor(22, 20); tft.print(tBMEString);
-  tft.setCursor(22, 85); tft.print(tString);
+  tft.drawRightString(String(tBMEString),120,20,6);
+  tft.drawRightString(String(tString),120,85,6);
 }
 
 
