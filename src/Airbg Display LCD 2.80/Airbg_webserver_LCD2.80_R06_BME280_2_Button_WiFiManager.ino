@@ -26,8 +26,6 @@ bool initialConfig = false;
 
 float t, tBME;
 int p25, p10, h, p, s, id, hBME, pBME, counter = 1;
-char tString[6];
-char tBMEString[6];
 char tTailString[6];
 char tBMETailString[6];
 
@@ -163,18 +161,26 @@ void handleRoot() {
     // Fetch values from Json file.
     id = atoi(root["esp8266id"]); // ESP8266 ID number
     JsonArray& sensordatavalues = root["sensordatavalues"];
-    p10 = atof(sensordatavalues[0]["value"]); // SDS011 PM 10 data
-    p25 = atof(sensordatavalues[1]["value"]); // SDS011 PM 2.5 data
-    t = atof(sensordatavalues[2]["value"]); // BME280 temperature data
-    h = atof(sensordatavalues[3]["value"]); // BME280 humidity data
-    p = atof(sensordatavalues[4]["value"]); // BME280 presure data
-    p = p / 100;
-    s = atoi(sensordatavalues[8]["value"]); // ESP8266 signal level data
+    for(auto sensor : sensordatavalues){
+      if(strcmp("SDS_P1", sensor["value_type"].as<const char*>()) == 0){
+        p10 = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("SDS_P2", sensor["value_type"].as<const char*>()) == 0){
+        p25 = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_temperature", sensor["value_type"].as<const char*>()) == 0){
+        t = atof(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_humidity", sensor["value_type"].as<const char*>()) == 0){
+        h = atoi(sensor["value"].as<const char*>()); 
+      } else if(strcmp("BME280_pressure", sensor["value_type"].as<const char*>()) == 0){
+        p = atoi(sensor["value"].as<const char*>()); 
+        p /= 100;
+      } else if(strcmp("signal", sensor["value_type"].as<const char*>()) == 0){
+        s = atoi(sensor["value"].as<const char*>()); 
+      }
+    }
 
     // Turns numbers into text to reduce 1 digit after decimal point.
     float tTail = t - (int)t;
     dtostrf(tTail, 3, 1, tTailString);
-    dtostrf(t, 5, 1, tString);
   
     // Print values.
     Serial.print("ESP8266 ID: ");
@@ -195,7 +201,6 @@ void get_BME() {
 
     float tBMETail = tBME - (int)tBME;
     dtostrf(tBMETail, 3, 1, tBMETailString);
-    dtostrf(tBME, 5, 1, tBMEString);
 }
 
 
