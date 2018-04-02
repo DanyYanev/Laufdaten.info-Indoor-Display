@@ -1,5 +1,5 @@
-# OpenData-Indoor-Display
-Add-on indoor display for [**OpenData Stuttgart**](https://luftdaten.info/en/home-en/) Dust Sensors
+# Laufdaten.info Dust Sensor Indoor Display
+Add-on indoor display for your [**laufdaten.info**](https://luftdaten.info/en/home-en/) Dust Sensor
 
 If you are contributing to the [**luftdaten.info**](https://luftdaten.info/en/home-en/) project you can build your own indoor weather station and fetch the data off your outdoor sensor.
 
@@ -25,8 +25,11 @@ You will need:
      > http://arduino.esp8266.com/stable/package_esp8266com_index.json
    - Install the following libraries
       - [WifiManager by Ken Taylor](https://github.com/kentaylor/WiFiManager)
-      - [TFT_eSPI by Bodmer](https://github.com/Bodmer/TFT_eSPI)
       - [Adafruit Sensors](https://github.com/adafruit/Adafruit_Sensor)
       - [Adafruit BME280](https://github.com/adafruit/Adafruit_BME280_Library)
-      
+      - LCD
+        - [TFT_eSPI by Bodmer](https://github.com/Bodmer/TFT_eSPI)
+      - OLED
+        - [Driver library for the SSD1306 and SH1106 OLED](https://github.com/ThingPulse/esp8266-oled-ssd1306)
+        
     - Connect the hardware
