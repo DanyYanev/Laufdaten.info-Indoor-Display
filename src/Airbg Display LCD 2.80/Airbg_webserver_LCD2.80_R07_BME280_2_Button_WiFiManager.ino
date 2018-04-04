@@ -76,6 +76,7 @@ void setup(void){
   
   // BME280 Start.
   bme.begin();
+  get_BME(); 
   
 
   // Memory pool for JSON object tree.
@@ -178,7 +179,7 @@ void handleRoot() {
       }
     }
 
-    // Turns numbers into text to reduce 1 digit after decimal point.
+    // Separating temperature digits after decimal point to print with different size.
     float tTail = t - (int)t;
     dtostrf(tTail, 3, 1, tTailString);
   
@@ -199,6 +200,7 @@ void get_BME() {
     hBME = bme.readHumidity();
     pBME = bme.readPressure()/100.0F;
 
+    // Separating temperature digits after decimal point to print with different size.
     float tBMETail = tBME - (int)tBME;
     dtostrf(tBMETail, 3, 1, tBMETailString);
 }
@@ -253,8 +255,8 @@ void Page1() {
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("IN");
   tft.setCursor(5, 120); tft.print("OUT");
-  tft.setCursor(205, 25); tft.print("o");
-  tft.setCursor(205, 140); tft.print("o");
+  //tft.setCursor(205, 25); tft.print("o");
+  //tft.setCursor(205, 140); tft.print("o");
   tft.drawRightString(String((int)tBME),180,25,8);
   tft.drawRightString(String((int)t),180,140,8);
   tft.setTextFont(6);
@@ -289,7 +291,7 @@ void Page2() {
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("IN");
-  tft.setCursor(205, 25); tft.print("o");
+  //tft.setCursor(205, 25); tft.print("o");
   tft.drawRightString(String((int)tBME),180,25,8);
   tft.setTextFont(6);
   tft.setCursor(180, 63);
@@ -315,7 +317,7 @@ void Page3() {
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("OUT");
-  tft.setCursor(205, 25); tft.print("o");
+  //tft.setCursor(205, 25); tft.print("o");
   tft.drawRightString(String((int)t),180,25,8);
   tft.setTextFont(6);
   tft.setCursor(180, 63);
@@ -396,7 +398,7 @@ void loop(void){
     delay(1000);
   }  
 
-  //if(id != 0){                         // When receive ESP ID from sensor
+  //if(id != 0){                       // When receive ESP ID from sensor
      if(digitalRead(B1_PIN) == LOW){   // LCD display pages changing with button 1
       if(counter >= 3){                //Number of pages
         counter = 1;
