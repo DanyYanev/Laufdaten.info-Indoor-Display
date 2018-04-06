@@ -15,9 +15,9 @@
 #define _TIMEOUT_ 1000
 
  //set static ip
-#define STATIC_IP 192,168,1,50 
+#define STATIC_IP 192,168,0,50 
 IPAddress ip(STATIC_IP);   
-IPAddress gateway(192,168,1,1);   
+IPAddress gateway(192,168,0,1);   
 IPAddress subnet(255,255,255,0); 
 ESP8266WebServer server(80);
  // Indicates whether ESP has WiFi credentials saved from previous session.
