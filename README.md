@@ -55,6 +55,7 @@ You will need:
   - Buttons (Pin to GND)
     - D6 (Display page changing)
     - D3 (Configuration Mode -Onboard flash button)
+  - You can look also schematic pdf in shields folder
 ##### Configure the Indoor Display Conroller
   - After uploading the code the controller will run in Configuration Mode automatically. To manually put the controller in config mode use the flash button. 
   - The station tries to connect to the configured WLAN access point. If this does not work, the sensor opens an access point with the name "ESP *id*". The ID referes to the ChipID (in the example below the ESP13562701). Connect to the new network, wait a moment until the connection is made. Sometimes it take multiple attempts.
