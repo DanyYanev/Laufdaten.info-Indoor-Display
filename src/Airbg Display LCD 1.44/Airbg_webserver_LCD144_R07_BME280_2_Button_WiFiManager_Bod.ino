@@ -28,6 +28,9 @@ float t, tBME;
 int p25, p10, h, p, s, id, hBME, pBME, counter = 1;
 char tString[6];
 char tBMEString[6];
+char tTailString[6];
+char tBMETailString[6];
+
 
 bool status = true;
 
@@ -43,9 +46,11 @@ Adafruit_BME280 bme;
 #define BME_SDA D1
 #define BME_SDL D2
 
-// Inicialize display LCD TFT 2.8" 
+// Inicialize display LCD TFT 1.44" 
 // Don't forget to update "User_Setup.h" in Bodmer libray for LCD pins
-// ILI9341_DRIVER
+// ST7735_DRIVER and your type board
+// TFT_WIDTH  128
+// TFT_HEIGHT 128
 // TFT_CS          PIN_D8
 // TFT_DC          PIN_D0
 // TFT_RST  -1     Reset pin on ESP8266
@@ -178,9 +183,10 @@ void handleRoot() {
       }
     }
 
-    // Turns numbers into text to reduce 1 digit after decimal point.
-    dtostrf(t, 5, 1, tString);
-  
+    // Separating temperature digits after decimal point to print with different size.
+    float tTail = t - (int)t;
+    dtostrf(tTail, 3, 1, tTailString);
+
     // Print values.
     Serial.print("ESP8266 ID: ");
     Serial.println(id);
@@ -198,8 +204,9 @@ void get_BME() {
     hBME = bme.readHumidity();
     pBME = bme.readPressure()/100.0F;
     
-    // Turns numbers into text to reduce 1 digit after decimal point.
-    dtostrf(tBME, 5, 1, tBMEString);
+    // Separating temperature digits after decimal point to print with different size.
+    float tBMETail = tBME - (int)tBME;
+    dtostrf(tBMETail, 3, 1, tBMETailString);
 }
 
 
@@ -255,10 +262,15 @@ void Page1() {
   tft.setCursor(5, 5); tft.print("IN");
   tft.setCursor(5, 70); tft.print("OUT");
   tft.setTextSize(1);
-  tft.setCursor(120, 20); tft.print("O");
-  tft.setCursor(120, 85); tft.print("O");
-  tft.drawRightString(String(tBMEString),120,20,6);
-  tft.drawRightString(String(tString),120,85,6);
+  tft.setCursor(110, 20); tft.print("O");
+  tft.setCursor(110, 85); tft.print("O");
+  tft.drawRightString(String((int)tBME),95,20,6);
+  tft.drawRightString(String((int)t),95,85,6);
+  tft.setTextFont(4);
+  tft.setCursor(95, 37);
+  tft.print(String(tBMETailString[1]) + String(tBMETailString[2]));
+  tft.setCursor(95, 103);
+  tft.print(String(tTailString[1]) + String(tTailString[2]));
 }
 
 
@@ -278,8 +290,8 @@ void Page2() {
   }
   tft.setTextFont(6);
   tft.setTextColor(colorPM);
-  tft.setCursor(40, 20); tft.print(p25);
-  tft.setCursor(40, 85); tft.print(p10);
+  tft.drawRightString(String((int)p25),110,20,6);
+  tft.drawRightString(String((int)p10),110,85,6);
 }  
 
 
@@ -288,8 +300,8 @@ void Page3() {
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(1);
   tft.setCursor(10, 5); tft.print("OUTDOOR");
-  tft.setTextFont(4);
-  tft.setCursor(45, 25); tft.print(tString); tft.print("`");
+  tft.setCursor(95, 25); tft.print("O");
+  tft.drawRightString(dtostrf(t,6,1,tString), 90, 25, 4);
   tft.setTextFont(1);
   tft.setCursor(29, 60); tft.print("HUMID: "); tft.print(h); tft.print(" %");
   tft.setCursor(17, 75); tft.print("PRESURE: "); tft.print(p); tft.print(" hPa");
@@ -303,8 +315,8 @@ void Page4() {
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(1);
   tft.setCursor(10, 5); tft.print("INDOOR");
-  tft.setTextFont(4);
-  tft.setCursor(45, 25); tft.print(tBMEString); tft.print("`");
+  tft.setCursor(95, 25); tft.print("O");
+  tft.drawRightString(dtostrf(tBME,6,1,tBMEString), 90, 25, 4);
   tft.setTextFont(1);
   tft.setCursor(29, 60); tft.print("HUMID: "); tft.print(hBME); tft.print(" %");
   tft.setCursor(17, 75); tft.print("PRESURE: "); tft.print(pBME); tft.print(" hPa");
