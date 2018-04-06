@@ -69,7 +69,8 @@ You will need:
   - Find laufdatens sensor IP Address.
   - Go to its IP Address (ex. 192.168.0.112)
   - Click on Configuration
-  - Add the static IP of the indoor display controller (192.168.0.50 by default, standart router settings from 192.168.0.2 through 192.168.0.99 are not used for DHCP), the root and the port as shown below.
+  - Add the static IP of the indoor display controller (192.168.0.50 by default, standart router settings from 192.168.0.2 through 192.168.0.99 are not used for DHCP).
+  - The root and the port as shown below.
 <img width="499" alt="outsidesensorsetup" src="https://user-images.githubusercontent.com/22327641/38430433-edc76c00-39c9-11e8-8d26-daefe53866ab.png">
 
       
