@@ -7,6 +7,8 @@
 #include <SPI.h>
 #include "SH1106.h"               //https://github.com/ThingPulse/esp8266-oled-ssd1306
 #include "SSD1306.h"
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
 
 
 #define _TIMEOUT_ 1000
@@ -15,15 +17,16 @@ const char* ssid = "TP-LINK";
 const char* password = "abcd1234";
 
  //set static ip
-#define _STATIC_IP 192,168,1,50
+#define _STATIC_IP 192,168,0,50
 IPAddress ip(_STATIC_IP);   
-IPAddress gateway(192,168,1,1);   
+IPAddress gateway(192,168,0,1);   
 IPAddress subnet(255,255,255,0); 
 ESP8266WebServer server(80);  
 
-float t;
-int p25, p10, h, p, s, id, counter = 1;
+float t, tBME;
+int p25, p10, h, p, s, id, hBME, pBME, counter = 1;
 char tString[6];
+char tBMEString[6];
 
 bool status = true;
 
@@ -34,6 +37,10 @@ const int B1_PIN = D5; // 14 Button on shield, Changing Oled pages.
 const int B2_PIN = D6; // 12 Button on shield, WiFi status of ESP
 
 
+ // Initialize the BME280 I2C
+Adafruit_BME280 bme;
+#define BME_SDA D1
+#define BME_SDL D2
 
 
  // Initialize the OLED display using Wire library
@@ -54,6 +61,10 @@ void setup(void){
   digitalWrite(LED, HIGH);
   pinMode(B1_PIN, INPUT_PULLUP);
   pinMode(B2_PIN, INPUT_PULLUP);
+
+    // BME280 Start.
+  bme.begin();
+  get_BME(); 
 
   
   // Memory pool for JSON object tree.
@@ -168,8 +179,27 @@ void handleRoot() {
     server.send(200, "text/plain", "OK");    
 }
 
+// Ganerate function for BME sensor
+void get_BME() {
+    tBME = bme.readTemperature();
+    hBME = bme.readHumidity();
+    pBME = bme.readPressure()/100.0F;
+
+    // Turns numbers into text to reduce 1 digit after decimal point.
+    dtostrf(tBME, 5, 1, tBMEString);
+}
+
 
 void serialprintData() {
+  get_BME(); 
+  Serial.println("Indoor data"); 
+  Serial.print("Temperture is: ");
+  Serial.println(tBME);
+  Serial.print("Humidity is: ");
+  Serial.println(hBME);
+  Serial.print("Presure is: ");
+  Serial.println(pBME);
+  Serial.println(".");
   Serial.println("Outdoor data");
   Serial.print("Temperture is: ");
   Serial.println(t);
@@ -222,8 +252,19 @@ void OledDisplayPrint3() {
     delay(100);
 }
 
-// Ganerate Oled page for Wifi status
 void OledDisplayPrint4() {
+    display.clear();
+    display.setTextAlignment(TEXT_ALIGN_LEFT);
+    display.setFont(ArialMT_Plain_16);
+    display.drawString(5, 1, "TempIn: " + String(tBMEString) + " °C");
+    display.drawString(5, 24, "HumiIn:  " + String(hBME) + "  %");
+    display.drawString(5, 47, "PresIn: " + String(pBME) + " hPa");
+    display.display();
+    delay(100);
+}
+
+// Ganerate Oled page for Wifi status
+void OledDisplayPrint5() {
     display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_16);
@@ -256,7 +297,7 @@ void loop(void){
        
       // Oled display pages changing with button1
     if(digitalRead(B1_PIN) == LOW){
-      if(counter >= 3){
+      if(counter >= 4){
         counter = 1;
       } else {
         counter++;
@@ -265,17 +306,19 @@ void loop(void){
       Serial.println(counter);
       delay(200);
     }
-     // Oled display page4 with button2
+     // Oled display page5 with button2
     if(digitalRead(B2_PIN) == LOW){
-      OledDisplayPrint4();
-      Serial.println("Oled page 4");
+      OledDisplayPrint5();
+      Serial.println("Oled page 5");
       delay(200);
       } else if(counter == 1){
           OledDisplayPrint1();
       } else if(counter == 2) {
           OledDisplayPrint2();
-      }else if(counter == 3) {
+      } else if(counter == 3) {
           OledDisplayPrint3();
+      } else if(counter == 4) {
+          OledDisplayPrint4();
       }
   } 
   
