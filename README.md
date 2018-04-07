@@ -18,7 +18,7 @@ You will need:
     - OLED 0.96" I2C interface
     - OLED 1.3" I2C interface
     - LCD TFT 1.44" SPI interface
-    - LCD TFT 2.8"  SPI interface
+    - LCD TFT 2.8"  SPI interface without touch
     
 ## Installing
   ##### Setting up the arduino IDE
@@ -51,6 +51,7 @@ You will need:
     - TFT_SDA -> D7
     - TFT_LED -> +3.3v
     - Make the appropriate changes to User_Setup.h in Bodmer library (by default on Windowns located in Documents/Arduino/libraries/TFT-eSPI/) according to your display. The User_Setup.h file is very well documented.
+    - You can find ready User_Setup.h in code folders. For 1.44 if you have screen offset choose different board.
             
   - Buttons (Pin to GND)
     - D6 (Display page changing)
@@ -64,7 +65,8 @@ You will need:
     - After saving the desired configuration click on **EXIT PORTAL**! Else the configuration won't be saved.
   **OR**
   - Configure using android application. Special thanks to Keneth Taylor.
-    - Download the [ESP Connect app](https://play.google.com/store/apps/details?id=au.com.umranium.espconnect) and follow the steps. 
+    - Download the [ESP Connect app](https://play.google.com/store/apps/details?id=au.com.umranium.espconnect) and follow the steps.
+  - Oled version is without WiFi menager and you must add wifi SSID and Password in the code.  
   
 ##### Configure the OutsideSensor
   - Find laufdatens sensor IP Address.
