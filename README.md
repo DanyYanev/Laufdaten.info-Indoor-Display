@@ -66,7 +66,7 @@ You will need:
   **OR**
   - Configure using android application. Special thanks to Keneth Taylor.
     - Download the [ESP Connect app](https://play.google.com/store/apps/details?id=au.com.umranium.espconnect) and follow the steps.
-  - Oled version dont have WiFi menager and you must add wifi SSID and Password in the code.  
+  - Oled version is without WiFi menager and you must add wifi SSID and Password in the code.  
   
 ##### Configure the OutsideSensor
   - Find laufdatens sensor IP Address.
