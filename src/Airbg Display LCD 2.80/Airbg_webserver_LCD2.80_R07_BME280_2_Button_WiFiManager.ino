@@ -15,9 +15,9 @@
 #define _TIMEOUT_ 1000
 
  //set static ip
-#define STATIC_IP 192,168,1,50 
+#define STATIC_IP 192,168,0,50 
 IPAddress ip(STATIC_IP);   
-IPAddress gateway(192,168,1,1);   
+IPAddress gateway(192,168,0,1);   
 IPAddress subnet(255,255,255,0); 
 ESP8266WebServer server(80);
  // Indicates whether ESP has WiFi credentials saved from previous session.
@@ -255,8 +255,8 @@ void Page1() {
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("IN");
   tft.setCursor(5, 120); tft.print("OUT");
-  //tft.setCursor(205, 25); tft.print("o");
-  //tft.setCursor(205, 140); tft.print("o");
+  tft.setCursor(205, 25); tft.print("o");
+  tft.setCursor(205, 140); tft.print("o");
   tft.drawRightString(String((int)tBME),180,25,8);
   tft.drawRightString(String((int)t),180,140,8);
   tft.setTextFont(6);
@@ -291,7 +291,7 @@ void Page2() {
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("IN");
-  //tft.setCursor(205, 25); tft.print("o");
+  tft.setCursor(205, 25); tft.print("o");
   tft.drawRightString(String((int)tBME),180,25,8);
   tft.setTextFont(6);
   tft.setCursor(180, 63);
@@ -317,7 +317,7 @@ void Page3() {
   tft.setTextColor(TFT_WHITE);
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("OUT");
-  //tft.setCursor(205, 25); tft.print("o");
+  tft.setCursor(205, 25); tft.print("o");
   tft.drawRightString(String((int)t),180,25,8);
   tft.setTextFont(6);
   tft.setCursor(180, 63);
