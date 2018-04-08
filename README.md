@@ -59,7 +59,7 @@ You will need:
   - You can look also schematic pdf in shields folder
 ##### Configure the Indoor Display Conroller
   - After uploading the code the controller will run in Configuration Mode automatically. To manually put the controller in config mode use the flash button. 
-  - The station tries to connect to the configured WLAN access point. If this does not work, the sensor opens an access point with the name "ESP *id*". The ID referes to the ChipID (in the example below the ESP13562701). Connect to the new network, wait a moment until the connection is made. Sometimes it take multiple attempts.
+  - The device tries to connect to the configured WLAN access point. If this does not work, the controller opens an access point with the name "ESP *id*". The ID referes to the ChipID (ex. ESP12345). Connect to the new network, wait a moment until the connection is made. Sometimes it take multiple attempts.
   - Configure using browser
     - Open your browser and type in http://192.168.4.1/. You see the menu site, choose “Configure” and input your credentional.
     - After saving the desired configuration click on **EXIT PORTAL**! Else the configuration won't be saved.
@@ -76,5 +76,10 @@ You will need:
   - The path and the port as shown below.
 <img width="308" alt="outdoor sensor settings" src="https://user-images.githubusercontent.com/22327641/38470807-d6eae57c-3b70-11e8-81f4-78d50c0c58cd.png">
 
+## Shields
+  - Kicad and Gerber files ar in folder shields
+    - Oled (Tested)
+    - LCD 1.44 (not tested yet)
+    - LCD 2.8 (in progress)
       
           
