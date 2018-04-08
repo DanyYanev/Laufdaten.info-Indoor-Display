@@ -78,8 +78,8 @@ You will need:
 
 ## Shields
   - Kicad and Gerber files ar in folder shields
-    - Oled (Tested)
-    - LCD 1.44 (not tested yet)
-    - LCD 2.8 (in progress)
+    - Oled 0.96 (Tested)
+    - LCD 1.44  (not tested yet)
+    - LCD 2.8   (in progress)
       
           
