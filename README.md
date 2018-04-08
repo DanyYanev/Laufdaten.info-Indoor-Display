@@ -77,9 +77,11 @@ You will need:
 <img width="308" alt="outdoor sensor settings" src="https://user-images.githubusercontent.com/22327641/38470807-d6eae57c-3b70-11e8-81f4-78d50c0c58cd.png">
 
 ## Shields
-  - Kicad and Gerber files ar in folder shields
-    - Oled 0.96 (Tested)
-    - LCD 1.44  (not tested yet)
-    - LCD 2.8   (in progress)
+  - Kicad and Gerber files are in shields folder.
+    - Indoor display
+      - Oled 0.96 (Tested)
+      - LCD 1.44  (not tested yet)
+      - LCD 2.8   (in progress)
+    - Outdoor sensor for better connection between sensors and ESP.
       
           
