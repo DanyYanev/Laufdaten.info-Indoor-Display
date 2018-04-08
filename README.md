@@ -74,8 +74,7 @@ You will need:
   - Click on Configuration
   - Add the static IP of the indoor display controller (192.168.0.50 by default, standart router settings from 192.168.0.2 through 192.168.0.99 are not used for DHCP).
   - The path and the port as shown below.
-![outdoor sensor settings](https://user-images.githubusercontent.com/22327641/38470765-32b4a8ee-3b70-11e8-814c-2d681ddd4ca1.png)
-
+<img width="308" alt="outdoor sensor settings" src="https://user-images.githubusercontent.com/22327641/38470807-d6eae57c-3b70-11e8-81f4-78d50c0c58cd.png">
 
       
           
