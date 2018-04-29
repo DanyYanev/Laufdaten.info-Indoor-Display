@@ -40,8 +40,6 @@ const int B2_PIN = D3; //0 FLASH Button onboard, Start wifi config mode
 
  // Initialize the BME280 I2C
 Adafruit_BME280 bme;
-#define BME_SDA D1
-#define BME_SDL D2
 
 // Inicialize display LCD TFT 2.8" 
 // Don't forget to update "User_Setup.h" in Bodmer libray for LCD pins
@@ -75,6 +73,7 @@ void setup(void){
   pinMode(B2_PIN, INPUT_PULLUP);
   
   // BME280 Start.
+  Wire.begin(D1, D2);
   bme.begin();
   get_BME(); 
   
