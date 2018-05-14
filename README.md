@@ -80,7 +80,7 @@ You will need:
   - Kicad and Gerber files are in shields folder.
     - Indoor display
       - Oled 0.96 (Tested)
-      - LCD 1.44  (not tested yet)
+      - LCD 1.44  (Tested)
       - LCD 2.8   (in progress)
     - Outdoor sensor for better connection between sensors and ESP.
       
