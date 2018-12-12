@@ -34,14 +34,19 @@ bool status = true;
 int lastCheck;
 
 const int LED = D4; //2 Controls the onboard LED.
-const int B1_PIN = D6; //12 Changing LCD pages.
-const int B2_PIN = D3; //0 FLASH Button onboard, Start wifi config mode
+const int B1_PIN = D2; //12 Changing LCD pages.
+const int B2_PIN = D6; //Start wifi config mode or D3 to use FLASH Button onboard.
 
 
  // Initialize the BME280 I2C
 Adafruit_BME280 bme;
 
 // Inicialize display LCD TFT 2.8" 
+// Display SCK       to NodeMCU pin D5
+// Display SDO/MISO  to NodeMCU pin D6
+// Display SDI/MOSI  to NodeMCU pin D7
+// Display RESET     to NodeMCU pin RST
+
 // Don't forget to update "User_Setup.h" in Bodmer libray for LCD pins
 // ILI9341_DRIVER
 // TFT_CS          PIN_D8
@@ -66,14 +71,14 @@ void setup(void){
   tft.setRotation(0);             //0,1,2,3
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE);
-  
+ 
   pinMode(LED, OUTPUT);
   digitalWrite(LED, HIGH);
   pinMode(B1_PIN, INPUT_PULLUP);
   pinMode(B2_PIN, INPUT_PULLUP);
   
   // BME280 Start.
-  Wire.begin(D1, D2);
+  Wire.begin(D1, D3);
   bme.begin();
   get_BME(); 
   
@@ -180,6 +185,9 @@ void handleRoot() {
 
     // Separating temperature digits after decimal point to print with different size.
     float tTail = t - (int)t;
+    if(tTail<0){                               //Turn Tail to positive number
+      tTail = tTail * -1;
+      }
     dtostrf(tTail, 3, 1, tTailString);
   
     // Print values.
@@ -201,6 +209,9 @@ void get_BME() {
 
     // Separating temperature digits after decimal point to print with different size.
     float tBMETail = tBME - (int)tBME;
+    if(tBMETail<0){                               //Turn Tail to positive number
+      tBMETail = tBMETail * -1;
+      }
     dtostrf(tBMETail, 3, 1, tBMETailString);
 }
 
@@ -305,7 +316,7 @@ void Page2() {
   tft.drawCentreString(WiFi.SSID(),120,208,4);
   tft.setCursor(50, 238); tft.println(WiFi.localIP());
 
-  tft.drawLine(15, 271, 255, 271, TFT_WHITE);
+  tft.drawLine(15, 271, 225, 271, TFT_WHITE);
   tft.setCursor(40, 285); tft.print(WiFi.channel()); tft.print("ch");
   tft.setCursor(115, 285); tft.print(WiFi.RSSI()); tft.print("dbm");
 }  
