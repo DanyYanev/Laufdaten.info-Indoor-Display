@@ -15,9 +15,9 @@
 #define _TIMEOUT_ 1000
 
  //set static ip
-#define STATIC_IP 192,168,0,50 
+#define STATIC_IP 192,168,1,50 
 IPAddress ip(STATIC_IP);   
-IPAddress gateway(192,168,0,1);   
+IPAddress gateway(192,168,1,1);   
 IPAddress subnet(255,255,255,0); 
 ESP8266WebServer server(80);
  // Indicates whether ESP has WiFi credentials saved from previous session.
@@ -26,17 +26,14 @@ bool initialConfig = false;
 
 float t, tBME;
 int p25, p10, h, p, s, id, hBME, pBME, counter = 1;
-char tTailString[6];
-char tBMETailString[6];
+char tString[6];
+char tBMEString[6];
 
 bool status = true;
 
 int lastCheck;
 
 const int LED = D4; //2 Controls the onboard LED.
-const int B1_PIN = D2; //12 Changing LCD pages.
-const int B2_PIN = D6; //Start wifi config mode or D3 to use FLASH Button onboard.
-
 
  // Initialize the BME280 I2C
 Adafruit_BME280 bme;
@@ -49,11 +46,14 @@ Adafruit_BME280 bme;
 
 // Don't forget to update "User_Setup.h" in Bodmer libray for LCD pins
 // ILI9341_DRIVER
+
 // TFT_CS          PIN_D8
 // TFT_DC          PIN_D0
 // TFT_RST  -1     Reset pin on ESP8266
 
-// D0_USED_FOR_DC  
+// TOUCH_CS PIN_D2 
+
+// D0_USED_FOR_DC 
 
 #define TFT_WHITE  0xFFBB // New colour RGB565 code (warm white)
 uint16_t colorPM;
@@ -71,14 +71,15 @@ void setup(void){
   tft.setRotation(0);             //0,1,2,3
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE);
- 
+  // Touch calibration settings from Bodmer library example
+  uint16_t calData[5] = { 251, 3529, 399, 3502, 4 };
+  tft.setTouch(calData);
+  
   pinMode(LED, OUTPUT);
   digitalWrite(LED, HIGH);
-  pinMode(B1_PIN, INPUT_PULLUP);
-  pinMode(B2_PIN, INPUT_PULLUP);
   
   // BME280 Start.
-  Wire.begin(D1, D3);
+  Wire.begin(D1, D3);  // (SDA,SCL)
   bme.begin();
   get_BME(); 
   
@@ -183,13 +184,9 @@ void handleRoot() {
       }
     }
 
-    // Separating temperature digits after decimal point to print with different size.
-    float tTail = t - (int)t;
-    if(tTail<0){                               //Turn Tail to positive number
-      tTail = tTail * -1;
-      }
-    dtostrf(tTail, 3, 1, tTailString);
-  
+    // Separating temperature digits to print with different size.
+    dtostrf(t, 5, 1, tString);
+    
     // Print values.
     Serial.print("ESP8266 ID: ");
     Serial.println(id);
@@ -207,12 +204,8 @@ void get_BME() {
     hBME = bme.readHumidity();
     pBME = bme.readPressure()/100.0F;
 
-    // Separating temperature digits after decimal point to print with different size.
-    float tBMETail = tBME - (int)tBME;
-    if(tBMETail<0){                               //Turn Tail to positive number
-      tBMETail = tBMETail * -1;
-      }
-    dtostrf(tBMETail, 3, 1, tBMETailString);
+    // Separating temperature digits to print with different size.
+    dtostrf(tBME, 5, 1, tBMEString);   
 }
 
 
@@ -242,7 +235,7 @@ void serialprintData() {
   Serial.println(s);   
   Serial.println(".");
   Serial.println("Waiting station data");
-  Serial.println(".");   
+  Serial.println(".");
 }
 
 
@@ -267,13 +260,10 @@ void Page1() {
   tft.setCursor(5, 120); tft.print("OUT");
   tft.setCursor(205, 25); tft.print("o");
   tft.setCursor(205, 140); tft.print("o");
-  tft.drawRightString(String((int)tBME),180,25,8);
-  tft.drawRightString(String((int)t),180,140,8);
-  tft.setTextFont(6);
-  tft.setCursor(180, 63);
-  tft.print(String(tBMETailString[1]) + String(tBMETailString[2]));
-  tft.setCursor(180, 178);
-  tft.print(String(tTailString[1]) + String(tTailString[2]));
+  tft.drawRightString(String(tBMEString[0])+String(tBMEString[1])+String(tBMEString[2]),180,25,8);
+  tft.drawRightString(String(tString[0])+String(tString[1])+String(tString[2]),180,140,8);
+  tft.drawString(String(tBMEString[3])+String(tBMEString[4]),180,63,6);
+  tft.drawString(String(tString[3])+String(tString[4]),180,178,6);
   
   tft.drawLine(80, 120, 225, 120, TFT_LIGHTGREY); //(x1, y1, x2, y2, color);
   tft.drawLine(10, 235, 230, 235, TFT_WHITE);
@@ -302,10 +292,8 @@ void Page2() {
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("IN");
   tft.setCursor(205, 25); tft.print("o");
-  tft.drawRightString(String((int)tBME),180,25,8);
-  tft.setTextFont(6);
-  tft.setCursor(180, 63);
-  tft.print(String(tBMETailString[1]) + String(tBMETailString[2]));
+  tft.drawRightString(String(tBMEString[0])+String(tBMEString[1])+String(tBMEString[2]),180,25,8);
+  tft.drawString(String(tBMEString[3])+String(tBMEString[4]),180,63,6);
   
   tft.drawLine(15, 120, 225, 120, TFT_WHITE);
   tft.setTextFont(4);
@@ -328,10 +316,8 @@ void Page3() {
   tft.setTextFont(4);
   tft.setCursor(5, 5); tft.print("OUT");
   tft.setCursor(205, 25); tft.print("o");
-  tft.drawRightString(String((int)t),180,25,8);
-  tft.setTextFont(6);
-  tft.setCursor(180, 63);
-  tft.print(String(tTailString[1]) + String(tTailString[2]));
+  tft.drawRightString(String(tString[0])+String(tString[1])+String(tString[2]),180,25,8);
+  tft.drawString(String(tString[3])+String(tString[4]),180,63,6);    
   
   tft.drawLine(15, 120, 225, 120, TFT_WHITE);
   tft.setTextFont(4);
@@ -376,11 +362,25 @@ void configModeCallback (WiFiManager *myWiFiManager) {
 
 void loop(void){
   
+  // To store the touch coordinates
+  uint16_t x = 0, y = 0; 
+
+  // Pressed will be set true is there is a valid touch on the screen
+  boolean pressed = tft.getTouch(&x, &y);
+  if (pressed) {
+    Serial.print("x,y = "); Serial.print(x);
+    Serial.print(","); Serial.println(y);
+  }
+
+
+  
     // If configuration portal requested?
-  if ((digitalRead(B2_PIN) == LOW) || (initialConfig)) {
+  if ((counter == 2 && x > 10 && x < 230 && y > 200 && y < 310) || (initialConfig)) {
     server.close(); //Stop previous server
     Serial.println("Configuration portal requested.");
     digitalWrite(LED, LOW);
+    tft.drawLine(15, 195, 225, 195, TFT_ORANGE);
+    tft.drawLine(15, 271, 225, 271, TFT_ORANGE);
     WiFiManager wifiManager;
     
     //reset settings - for testing
@@ -408,20 +408,20 @@ void loop(void){
     delay(1000);
   }  
 
-  //if(id != 0){                       // When receive ESP ID from sensor
-     if(digitalRead(B1_PIN) == LOW){   // LCD display pages changing with button 1
-      if(counter >= 3){                //Number of pages
-        counter = 1;
-      } else {
-        counter++;
-      }
-      Serial.println(".");
-      Serial.print("LCD page ");
-      Serial.println(counter);
-      tftprintData();
-      delay(200);        
-    }
-   //}
+  //if(id != 0){                                   // When receive ESP ID from sensor                              
+      if(x > 10 && x < 230 && y > 10 && y < 190){  // LCD display touch
+        if(counter >= 3){                          //Number of pages
+          counter = 1;
+        } else {
+          counter++;
+        }
+        Serial.print("LCD page ");
+        Serial.println(".");
+        Serial.println(counter);
+        tftprintData();
+        delay(200);        
+     }
+ //}
   
    // Status of ESP8266
   if(millis() - lastCheck > _TIMEOUT_){
