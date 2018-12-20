@@ -77,7 +77,7 @@ You will need:
   - Find laufdatens sensor IP Address.
   - Go to its IP Address (ex. 192.168.0.112)
   - Click on Configuration
-  - Add the static IP of the indoor display controller (192.168.0.50 by default, standart router settings from 192.168.0.2 through 192.168.0.99 are not used for DHCP).
+  - Add the static IP of the indoor display controller 192.168.0.50, (standart router settings from 192.168.0.2 through 192.168.0.99 are not used for DHCP).
   - The path and the port as shown below.
 <img width="308" alt="outdoor sensor settings" src="https://user-images.githubusercontent.com/22327641/38470807-d6eae57c-3b70-11e8-81f4-78d50c0c58cd.png">
 
@@ -87,6 +87,7 @@ You will need:
       - Oled 0.96 (Tested)
       - LCD 1.44  (Tested)
       - LCD 2.80  (ESP-12E tested)
+      - LCD 2.80  (NodeMCU not tested)
     - Outdoor sensor for better connection between sensors and ESP.
       
           
