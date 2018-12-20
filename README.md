@@ -12,7 +12,7 @@ The same IP Address you have to add in the outside sensor to send data to the in
 # Getting Started
 You will need:
   - Working [Laufdaten dust sensor](https://luftdaten.info/en/construction-manual/) **with BME 280 and SDS011**
-  - *Another* NodeMCU v3 ESP8266
+  - *Another* NodeMCU v3 ESP8266 or ESP-12E
   - *Another* BME 280
   - A display
     - OLED 0.96" I2C interface
