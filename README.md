@@ -36,7 +36,7 @@ You will need:
       - OLED
         - [Driver library for the SSD1306 and SH1106 OLED by ThingPulse](https://github.com/ThingPulse/esp8266-oled-ssd1306)
         
-  ##### Connect the hardware
+  ##### Connect the hardware for Oled and LCD 1.44"
   - BME280 (I2C)
     - SDA -> D1
     - SDL -> D2
@@ -57,6 +57,10 @@ You will need:
     - D6 (Display page changing)
     - D3 (Configuration Mode -Onboard flash button)
   - You can look also schematic pdf in shields folder
+  
+  ##### Connect the hardware for LCD 2.80"
+  - See schematic pdf in shields folder
+  
 ##### Configure the Indoor Display Conroller
   - After uploading the code the controller will run in Configuration Mode automatically. To manually put the controller in config mode use the flash button. 
   - The device tries to connect to the configured WLAN access point. If this does not work, the controller opens an access point with the name "ESP *id*". The ID referes to the ChipID (ex. ESP12345). Connect to the new network, wait a moment until the connection is made. Sometimes it take multiple attempts.
@@ -81,7 +85,7 @@ You will need:
     - Indoor display
       - Oled 0.96 (Tested)
       - LCD 1.44  (Tested)
-      - LCD 2.8   (in progress)
+      - LCD 2.80  (ESP-12E tested)
     - Outdoor sensor for better connection between sensors and ESP.
       
           
