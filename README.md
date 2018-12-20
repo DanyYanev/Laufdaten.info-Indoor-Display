@@ -18,6 +18,7 @@ You will need:
     - OLED 0.96" I2C interface
     - OLED 1.3" I2C interface
     - LCD TFT 1.44" SPI interface
+    - LCD TFT 2.8"  SPI interface with touch
     - LCD TFT 2.8"  SPI interface without touch
     
 ## Installing
