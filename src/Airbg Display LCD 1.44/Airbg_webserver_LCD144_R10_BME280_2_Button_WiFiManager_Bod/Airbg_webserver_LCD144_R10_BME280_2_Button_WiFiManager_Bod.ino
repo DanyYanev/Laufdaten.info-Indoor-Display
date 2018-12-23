@@ -181,9 +181,8 @@ void handleRoot() {
       }
     }
 
-    // Separating temperature digits after decimal point to print with different size.
-    float tTail = t - (int)t;
-    dtostrf(tTail, 3, 1, tTailString);
+     // Separating temperature digits to print with different size.
+    dtostrf(t, 5, 1, tString);
 
     // Print values.
     Serial.print("ESP8266 ID: ");
@@ -202,9 +201,8 @@ void get_BME() {
     hBME = bme.readHumidity();
     pBME = bme.readPressure()/100.0F;
     
-    // Separating temperature digits after decimal point to print with different size.
-    float tBMETail = tBME - (int)tBME;
-    dtostrf(tBMETail, 3, 1, tBMETailString);
+    // Separating temperature digits to print with different size.
+    dtostrf(tBME, 5, 1, tBMEString);
 }
 
 
@@ -262,13 +260,10 @@ void Page1() {
   tft.setTextSize(1);
   tft.setCursor(110, 20); tft.print("O");
   tft.setCursor(110, 85); tft.print("O");
-  tft.drawRightString(String((int)tBME),95,20,6);
-  tft.drawRightString(String((int)t),95,85,6);
-  tft.setTextFont(4);
-  tft.setCursor(95, 37);
-  tft.print(String(tBMETailString[1]) + String(tBMETailString[2]));
-  tft.setCursor(95, 103);
-  tft.print(String(tTailString[1]) + String(tTailString[2]));
+  tft.drawRightString(String(tBMEString[0])+String(tBMEString[1])+String(tBMEString[2]),95,20,6);
+  tft.drawRightString(String(tString[0])+String(tString[1])+String(tString[2]),95,85,6);
+  tft.drawString(String(tBMEString[3])+String(tBMEString[4]),95,37,4);
+  tft.drawString(String(tString[3])+String(tString[4]),95,103,4);
 }
 
 
@@ -299,7 +294,7 @@ void Page3() {
   tft.setTextFont(1);
   tft.setCursor(10, 5); tft.print("OUTDOOR");
   tft.setCursor(95, 25); tft.print("O");
-  tft.drawRightString(dtostrf(t,6,1,tString), 90, 25, 4);
+  tft.drawRightString(String(tString), 90, 25, 4);
   tft.setTextFont(1);
   tft.setCursor(29, 60); tft.print("HUMID: "); tft.print(h); tft.print(" %");
   tft.setCursor(17, 75); tft.print("PRESURE: "); tft.print(p); tft.print(" hPa");
@@ -314,7 +309,7 @@ void Page4() {
   tft.setTextFont(1);
   tft.setCursor(10, 5); tft.print("INDOOR");
   tft.setCursor(95, 25); tft.print("O");
-  tft.drawRightString(dtostrf(tBME,6,1,tBMEString), 90, 25, 4);
+  tft.drawRightString(String(tBMEString), 90, 25, 4);
   tft.setTextFont(1);
   tft.setCursor(29, 60); tft.print("HUMID: "); tft.print(hBME); tft.print(" %");
   tft.setCursor(17, 75); tft.print("PRESURE: "); tft.print(pBME); tft.print(" hPa");
